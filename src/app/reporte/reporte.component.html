@@ -1,0 +1,72 @@
+
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <div class="logo">
+        <div class="icono"></div>
+        <h1>Farmacia Stephanie</h1>
+      </div>
+      <nav class="menu">
+        <ul>
+          <li><a href="#">Inventario</a></li>
+          <li><a href="#">Registro de Ventas</a></li>
+          <li><a href="#" class="active">Reportes</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+
+    <main class="main-content">
+      <header>
+        <h2>Reportes</h2>
+      </header>
+
+      <section class="graphs">
+        <div class="graph">
+          <canvas id="barChart"></canvas>
+          <p>Reporte Ventas Noviembrr</p>
+        </div>
+        <div class="graph">
+          <canvas id="pieChart"></canvas>
+          <p>Inventario Actualizado</p>
+        </div>
+      </section>
+
+      <section class="table-section">
+        <h3>Alrtas</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Nombre de Producto</th>
+              <th>Cantidad</th>
+              <th>Fecha de Expiración</th>
+              <th>Alerta</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Producto A</td>
+              <td>20</td>
+              <td>01-12-2024</td>
+              <td><span class="alert red"></span></td>
+            </tr>
+            <tr>
+              <td>Producto B</td>
+              <td>50</td>
+              <td>15-01-2025</td>
+              <td><span class="alert yellow"></span></td>
+            </tr>
+            <tr>
+              <td>Producto C</td>
+              <td>100</td>
+              <td>20-10-2025</td>
+              <td><span class="alert green"></span></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+
+
+</body>

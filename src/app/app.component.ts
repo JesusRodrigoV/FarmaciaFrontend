@@ -7,7 +7,7 @@ import { DetalleVentaService } from './services/detalleVenta/detalle-venta.servi
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
-import {MatSort} from '@angular/material/sort';
+import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { AfterViewInit } from '@angular/core';
 
@@ -16,19 +16,23 @@ import { AfterViewInit } from '@angular/core';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit, AfterViewInit {
+export class AppComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
 
-  venta: UntypedFormGroup;
-  paises: any;
-  estados: any;
-  personas: any;
+  ventaForm: UntypedFormGroup;
+  detalleVenta: any;
+  producto: any;
+  proveedor: any;
+  recetaMedica: any;
+  usuarios: any;
+  venta: any;
   dataSource: MatTableDataSource<any>;
 
-  displayedColumns: string[] = ['id', 'name', 'last-name', 'age', 'country-name', 'state-name', 'options'];
+  displayedColumns: string[] = ['id', 'name', 'password', 'rol', 'options'];
+
 
   panelOpenState = false;
 
@@ -44,27 +48,9 @@ export class AppComponent implements OnInit, AfterViewInit {
   ) {
 
   }
-  ngAfterViewInit(): void {
-    this.setDataAndPagination();
-  }
   ngOnInit(): void {
-
-    this.venta = this.fb.group({
-      id: [''],
-      nombre: ['', Validators.required],
-      apellido: ['', Validators.required],
-      edad: ['', Validators.required],
-      pais: ['', Validators.required],
-      estado: ['', Validators.required],
-    });
-
-
   }
 
 
-  setDataAndPagination(){
-    this.dataSource = new MatTableDataSource(this.personas);
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
+
 }

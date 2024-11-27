@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -5,5 +6,9 @@ import { Injectable } from '@angular/core';
 })
 export class ProveedorService {
 
-  constructor() { }
+  private API_SERVER = "http://localhost:8080/proveedor/";
+
+  constructor(
+    private httpClient: HttpClient
+  ) { }
 }

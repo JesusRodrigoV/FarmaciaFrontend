@@ -22,9 +22,11 @@
     "@angular/platform-browser-dynamic": "^18.2.0",
     "@angular/router": "^18.2.0",
     "@popperjs/core": "^2.4.4",
-    "bootstrap": "^4.6.2",
+    "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.11.3",
+    "chart.js": "^4.4.6",
     "jquery": "^3.5.1",
+    "personafront": "file:",
     "rxjs": "~6.5.4",
     "tslib": "^2.0.0",
     "zone.js": "^0.14.10"
