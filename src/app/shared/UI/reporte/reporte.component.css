@@ -1,0 +1,103 @@
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 20%;
+  background-color: #f9f9f9;
+  border-right: 1px solid #ddd;
+  padding: 20px;
+}
+
+.sidebar .logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.icono {
+  width: 40px;
+  height: 40px;
+  background-color: red;
+}
+
+.menu ul {
+  list-style: none;
+  padding: 0;
+}
+
+.menu ul li {
+  margin: 20px 0;
+}
+
+.menu ul li a {
+  text-decoration: none;
+  color: #0056b3;
+  font-weight: bold;
+}
+
+.menu ul li a.active {
+  color: #e63946;
+}
+
+.main-content {
+  width: 80%;
+  padding: 20px;
+}
+
+.graphs {
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+}
+
+.graph {
+  width: 45%;
+}
+
+.table-section {
+  margin-top: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table th,
+table td {
+  text-align: left;
+  padding: 10px;
+}
+
+table thead {
+  background-color: #e0e0e0;
+}
+
+.alert {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+}
+
+.alert.red {
+  background-color: #e63946;
+}
+
+.alert.yellow {
+  background-color: #f1c40f;
+}
+
+.alert.green {
+  background-color: #27ae60;
+}

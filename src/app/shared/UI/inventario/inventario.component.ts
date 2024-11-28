@@ -1,15 +1,13 @@
-import { ProductoService } from './../services/producto/producto.service';
+
 import { Component } from '@angular/core';
-import { ReporteComponent } from '../reporte/reporte.component';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../navbar/navbar.component';
-import { VentaComponent } from '../venta/venta.component';
-import { LoginComponent } from '../login/login.component';
 import { FormsModule } from '@angular/forms';
+import { ProductoService } from '../../../services/producto/producto.service';
 
 @Component({
     selector: 'app-inventario',
-    imports: [FormsModule, CommonModule, NavbarComponent, VentaComponent, ReporteComponent, LoginComponent],
+    imports: [FormsModule, CommonModule, NavbarComponent],
     templateUrl: './inventario.component.html',
     styleUrl: './inventario.component.css'
 })

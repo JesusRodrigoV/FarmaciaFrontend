@@ -1,0 +1,53 @@
+
+<body>
+  <div class="container">
+    <app-navbar/>
+
+
+    <main class="main-content">
+      <header>
+        <h2>Reportes</h2>
+      </header>
+
+      <!-- <section class="graphs">
+        <div class="graph">
+          <canvas id="barChart"></canvas>
+          <p>Reporte Ventas Noviembrr</p>
+        </div>
+        <div class="graph">
+          <canvas id="pieChart"></canvas>
+          <p>Inventario Actualizado</p>
+        </div>
+      </section> -->
+
+      <section class="table-section">
+        <h3>Alertas</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Nombre de Producto</th>
+              <th>Cantidad</th>
+              <th>Fecha de Expiración</th>
+              <th>Alerta</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let producto of productos">
+              <tr *ngIf="producto.cantidad < 5">
+                <td>{{ producto.nombre }}</td>
+                <td>{{ producto.cantidad }}</td>
+                <td>{{ producto.fechaVencimiento | date: 'dd/MM/yyyy' }}</td>
+                <td>
+                  <span class="alert" [ngClass]="getAlertClass(producto)"></span>
+                </td>
+              </tr>
+            </ng-container>
+
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+
+
+</body>

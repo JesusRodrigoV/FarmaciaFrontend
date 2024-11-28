@@ -1,0 +1,97 @@
+<body>
+  <div class="container">
+    <app-navbar/>
+
+    <main class="main-content">
+      <header class="header">
+        <h2>Inventario</h2>
+        <div class="actions">
+          <button class="btn red" (click)="mostrarFormularioAgregarProducto()">Agregar Producto</button>
+          <input type="text" placeholder="Buscar Producto" class="search" />
+        </div>
+      </header>
+
+      <section class="table-section">
+        <table>
+          <thead>
+            <tr>
+              <th>Nombre de Producto</th>
+              <th>Cantidad</th>
+              <th>Fecha de Expiración</th>
+              <th>Alerta</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let producto of productos">
+              <td>{{ producto.nombre }}</td>
+              <td>{{ producto.cantidad }}</td>
+              <td>{{ producto.fechaVencimiento | date : "dd/MM/yyyy" }}</td>
+              <td>
+                <span class="alert" [ngClass]="getAlertClass(producto)"></span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+  <div *ngIf="mostrarModal" class="modal">
+    <div class="modal-content">
+      <h3>Agregar Producto</h3>
+      <form (ngSubmit)="agregarProducto()">
+        <label for="nombre">Nombre:</label>
+        <input
+          id="nombre"
+          [(ngModel)]="nuevoProducto.nombre"
+          name="nombre"
+          required
+        />
+
+        <label for="descripcion">Descripción:</label>
+        <input
+          id="descripcion"
+          [(ngModel)]="nuevoProducto.descripcion"
+          name="descripcion"
+          required
+        />
+
+        <label for="cantidad">Cantidad:</label>
+        <input
+          id="cantidad"
+          type="number"
+          [(ngModel)]="nuevoProducto.cantidad"
+          name="cantidad"
+          required
+        />
+        <label for="precio">Precio:</label>
+        <input
+          id="precio"
+          type="number"
+          [(ngModel)]="nuevoProducto.precio"
+          name="precio"
+          required
+        />
+
+        <label for="fechaVencimiento">Fecha de Vencimiento:</label>
+        <input
+          id="fechaVencimiento"
+          type="date"
+          [(ngModel)]="nuevoProducto.fechaVencimiento"
+          name="fechaVencimiento"
+          required
+        />
+
+        <!-- <label for="proveedor">Proveedor:</label>
+        <input
+          id="proveedor"
+          [(ngModel)]="nuevoProducto.proveedor"
+          name="proveedor"
+          required
+        /> -->
+
+        <button type="submit">Agregar</button>
+        <button type="button" (click)="cerrarModal()">Cerrar</button>
+      </form>
+    </div>
+  </div>
+</body>

@@ -5,11 +5,10 @@ import { LoginComponent } from '../login/login.component';
 import { VentaComponent } from '../venta/venta.component';
 
 @Component({
-  selector: 'app-reporte',
-  standalone: true,
-  imports: [NavbarComponent, ReporteComponent, LoginComponent, VentaComponent],
-  templateUrl: './reporte.component.html',
-  styleUrl: './reporte.component.css'
+    selector: 'app-reporte',
+    imports: [NavbarComponent, ReporteComponent, LoginComponent, VentaComponent],
+    templateUrl: './reporte.component.html',
+    styleUrl: './reporte.component.css'
 })
 export class ReporteComponent {
   ngOnInit() {

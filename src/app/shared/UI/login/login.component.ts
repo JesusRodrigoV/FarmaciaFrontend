@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { UsuarioService } from '../services/usuario/usuario.service';
+
 import { Router } from '@angular/router';
-import { InventarioComponent } from '../inventario/inventario.component';
+import { UsuarioService } from '../../../services/usuario/usuario.service';
 
 @Component({
     selector: 'app-login',
-    imports: [ReactiveFormsModule, InventarioComponent],
+    imports: [ReactiveFormsModule],
     templateUrl: './login.component.html',
     styleUrl: './login.component.css'
 })

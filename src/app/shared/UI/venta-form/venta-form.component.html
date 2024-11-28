@@ -1,0 +1,51 @@
+<form [formGroup]="ventaForm">
+  <div>
+    <label for="cliente">Nombre del Cliente</label>
+    <input type="text" formControlName="cliente" />
+  </div>
+
+  <div>
+    <label for="metodoPago">Método de Pago</label>
+    <select formControlName="metodoPago">
+      <option value="efectivo">Efectivo</option>
+      <option value="tarjeta">Tarjeta</option>
+      <option value="transferencia">Transferencia</option>
+    </select>
+  </div>
+
+  <div formArrayName="detalles">
+    <div
+      *ngFor="let detalle of detalles.controls; let i = index"
+      [formGroupName]="i"
+    >
+      <label for="productoId">Producto</label>
+      <input
+        type="text"
+        (input)="buscarProductos($event)"
+        placeholder="Buscar producto"
+      />
+      <select formControlName="productoId">
+        <option
+          *ngFor="let producto of filteredProductos"
+          [value]="producto.id"
+        >
+          {{ producto.nombre }}
+        </option>
+      </select>
+
+      <label for="cantidad">Cantidad</label>
+      <input type="number" formControlName="cantidad" />
+
+      <label for="precioUnitario">Precio Unitario</label>
+      <input type="number" formControlName="precioUnitario" />
+
+      <button type="button" (click)="eliminarDetalle(i)">Eliminar</button>
+    </div>
+  </div>
+
+  <button type="button" (click)="agregarDetalle()">Agregar Detalle</button>
+  <button type="submit" (click)="agregarVenta()">Guardar Venta</button>
+</form>
+<div *ngIf="mensajeExito" class="alert alert-success" role="alert">
+  {{ mensajeExito }}
+</div>
