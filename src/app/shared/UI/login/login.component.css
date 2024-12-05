@@ -1,0 +1,41 @@
+.gradient-custom {
+  background: linear-gradient(to right, rgb(203, 17, 17), rgb(252, 134, 37));
+}
+
+.vh-100 {
+  height: 100vh;
+}
+
+.card {
+  background-color: rgba(0, 0, 0, 0.75);
+}
+
+.form-outline {
+  position: relative;
+}
+
+.form-outline .form-label {
+  position: absolute;
+  top: 10px;
+  left: 15px;
+  color: #ccc;
+  transition: 0.2s ease all;
+}
+
+.form-outline input:focus + .form-label,
+.form-outline input:not(:placeholder-shown) + .form-label {
+  top: -20px;
+  left: 15px;
+  font-size: 0.85rem;
+  color: #fff;
+}
+
+.btn-outline-light {
+  border-color: #ffffff;
+  color: #ffffff;
+}
+
+.btn-outline-light:hover {
+  background-color: #ffffff;
+  color: #000;
+}

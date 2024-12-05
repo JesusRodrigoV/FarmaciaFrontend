@@ -1,0 +1,25 @@
+<div class="modal">
+
+  <div class="modal-content">
+    <h1>Agregar Categoria</h1>
+    <form >
+
+      <div class="input-container">
+        <input
+          type="text"
+          id="nombre"
+          [(ngModel)]="categoriaNueva.nombre"
+          name="nombre"
+          required
+        />
+        <label for="nombre" class="label">Nombre</label>
+        <div class="underline"></div>
+      </div>
+
+      <button type="submit" class="modal-btn" (click)="guardarCategoria()">Aceptar</button>
+      <button type="button" class="modal-btn cancel-btn" (click)="cerrarFormCliente()">Cancelar</button>
+    </form>
+  </div>
+</div>
+
+
