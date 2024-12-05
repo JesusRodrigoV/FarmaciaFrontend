@@ -1,0 +1,224 @@
+<div class="main-content">
+  <main>
+    <header class="header">
+      <h2>Inventario</h2>
+      <div class="actions">
+        <button class="btn red" (click)="mostrarFormularioAgregarProducto()">
+          Agregar Producto
+        </button>
+        <input type="text" placeholder="Buscar Producto" class="search" />
+      </div>
+    </header>
+
+    <section class="table-section">
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre de Producto</th>
+            <th>Categoria</th>
+            <th>Laboratorio</th>
+            <th>Cantidad</th>
+            <th>Fecha de Expiración</th>
+            <th>Precio</th>
+            <th>Alerta</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let producto of productos">
+            <td>{{ producto.nombre }}</td>
+            <td>{{ producto.categoria }}</td>
+            <td>{{ producto.laboratorio }}</td>
+            <td>{{ producto.stock }}</td>
+            <td>{{ producto.fechaVencimiento | date : "dd/MM/yyyy" }}</td>
+            <td>Bs. {{ producto.precio }}</td>
+            <td>
+              <span class="alert" [ngClass]="getAlertClass(producto)"></span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</div>
+
+<div *ngIf="mostrarModal" class="modal">
+  <div class="modal-content">
+    <h3>Agregar Producto</h3>
+    <form (ngSubmit)="agregarProducto()" #productoForm="ngForm">
+      <div class="input-container">
+        <input
+          id="nombre"
+          type="text"
+          [(ngModel)]="nuevoProducto.nombre"
+          name="nombre"
+          required
+        />
+        <label for="descripcion" class="label">Nombre</label>
+        <div class="underline"></div>
+      </div>
+
+      <div class="input-container">
+        <input
+          id="descripcion"
+          type="text"
+          [(ngModel)]="nuevoProducto.descripcion"
+          name="descripcion"
+          required
+        />
+        <label for="descripcion" class="label">Descripción</label>
+        <div class="underline"></div>
+      </div>
+
+      <div class="input-container">
+        <input
+          id="categoria"
+          autocomplete="off"
+          (input)="buscarCategorias($event)"
+          type="text"
+          [(ngModel)]="nuevoProducto.categoria"
+          name="categoria"
+          required
+        />
+        <label for="categoria" class="label">Categoría</label>
+        <div class="autocomplete-list" *ngIf="categoriaFiltrada.length">
+          <div
+            *ngFor="let categoria of categoriaFiltrada"
+            (click)="seleccionarCategoria(categoria)"
+            class="autocomplete-item"
+          >
+            {{ categoria.nombre }}
+          </div>
+        </div>
+        <div class="underline"></div>
+      </div>
+
+      <div class="input-container">
+        <input
+          id="laboratorio"
+          type="text"
+          autocomplete="off"
+          (input)="buscarLaboratorios($event)"
+          [(ngModel)]="nuevoProducto.laboratorio"
+          name="laboratorio"
+          required
+        />
+        <label for="laboratorio" class="label">Laboratorio</label>
+        <div class="autocomplete-list" *ngIf="laboratoriosFiltrada.length">
+          <div
+            *ngFor="let laboratorio of laboratoriosFiltrada"
+            (click)="seleccionarLaboratorio(laboratorio)"
+            class="autocomplete-item"
+          >
+            {{ laboratorio.nombre }}
+          </div>
+        </div>
+        <div class="underline"></div>
+      </div>
+
+      <div class="input-container">
+        <label for="stock">Stock:</label>
+        <input
+          id="stock"
+          type="number"
+          [(ngModel)]="nuevoProducto.stock"
+          name="stock"
+          required
+        />
+        <div class="underline"></div>
+      </div>
+
+      <div class="input-container">
+        <label for="precio">Precio:</label>
+        <input
+          id="precio"
+          type="number"
+          [(ngModel)]="nuevoProducto.precio"
+          name="precio"
+          required
+        />
+        <div class="underline"></div>
+      </div>
+
+      <div class="input-container">
+        <label for="fechaVencimiento">Fecha de Vencimiento:</label>
+        <input
+          id="fechaVencimiento"
+          type="date"
+          [(ngModel)]="nuevoProducto.fechaVencimiento"
+          name="fechaVencimiento"
+          required
+        />
+        <div class="underline"></div>
+      </div>
+
+      <button type="submit" class="modal-btn">Agregar</button>
+      <button
+        type="button"
+        class="modal-btn cancel-btn"
+        (click)="cerrarModal()"
+      >
+        Cerrar
+      </button>
+    </form>
+  </div>
+</div>
+<!-- Modal -->
+
+<!-- Modal Categoria -->
+<div class="modal" *ngIf="mostrarModalCategoria">
+  <div class="modal-content">
+    <h1>Agregar Categoria</h1>
+    <form>
+
+      <div class="input-container">
+        <input
+          type="text"
+          id="nombre"
+          [(ngModel)]="categoriaNueva.nombre"
+          name="nombre"
+          required
+        />
+        <label for="nombre" class="label">Nombre</label>
+        <div class="underline"></div>
+      </div>
+
+      <button type="submit" class="modal-btn" (click)="guardarCategoria()">Aceptar</button>
+      <button type="button" class="modal-btn cancel-btn" (click)="cerrarFormCategoria()">Cancelar</button>
+    </form>
+  </div>
+</div>
+
+<!-- Modal Laboratorio -->
+<div class="modal" *ngIf="mostrarModalLaboratorio">
+  <div class="modal-content">
+    <h1>Agregar Laboratorio</h1>
+    <form>
+
+      <div class="input-container">
+        <input
+          type="text"
+          id="nombre"
+          [(ngModel)]="laboratorioNuevo.nombre"
+          name="nombre"
+          required
+        />
+        <label for="nombre" class="label">Nombre</label>
+        <div class="underline"></div>
+      </div>
+      <div class="input-container">
+        <input
+          type="text"
+          id="ubicacion"
+          [(ngModel)]="laboratorioNuevo.ubicacion"
+          name="ubicacion"
+          required
+        />
+        <label for="ubicacion" class="label">Ubicacion</label>
+        <div class="underline"></div>
+      </div>
+
+      <button type="submit" class="modal-btn" (click)="guardarLaboratorio()">Aceptar</button>
+      <button type="button" class="modal-btn cancel-btn" (click)="cerrarFormLaboratorio()">Cancelar</button>
+    </form>
+  </div>
+</div>
