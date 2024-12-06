@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { NavbarComponent } from '../navbar/navbar.component';
-import { DetalleVenta, Venta, VentaService } from '../../../services/venta/venta.service';
+import { Cliente, Producto, Venta, VentaService } from '../../../services/venta/venta.service';
 import { CommonModule } from '@angular/common';
-import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ProductoService } from '../../../services/producto/producto.service';
 import { ClienteService } from '../../../services/cliente/cliente.service';
 
@@ -15,56 +14,43 @@ import { ClienteService } from '../../../services/cliente/cliente.service';
 })
 export class VentaComponent implements OnInit {
   ventas: Venta[] = [];
-  mostrarModal: boolean = false;
-  nuevaVenta: Venta = {
-    cliente: '',
-    metodoPago: '',
-    fecha: '',
-    total: 0,
-    detalles: [], // Campo adicional para detalles en texto
-  };
-  venta: Venta = {
-    cliente: '',
-    fecha: '',
-    metodoPago: '',
-    total: 0,
-    detalles: []
-  };
-  detalle: DetalleVenta = {
-    productoId: 0,
-    cantidad: 0,
-  };
+  clientes: Cliente[] = [];
+  clientesFiltrados: Cliente[] = [];
+  productos: Producto[] = [];
+  productosFiltrados: Producto[] = [];
+  mostrarModal = false;
+  mostrarModalCliente = false;
+  mostrarModalProducto = false;
 
   ventaForm: FormGroup;
-  mensajeExito: string | null = null;
-
-  clientes: any[] = [];
-  clientesFiltrados: any[] = [];
-  mostrarModalCliente: boolean = false;
-  clienteNuevo: any = {
+  clienteNuevo: Partial<Cliente> = {
     nombre: '',
     direccion: '',
     email: '',
     telefono: '',
   };
 
-  productos: any[] = [];
-  productosFiltrados: any[] = [];
-  mostrarModalProducto: boolean = false;
-  nuevoProducto: any = {
+  nuevoProducto: Partial<Producto> = {
     nombre: '',
-    direccion: '',
-    email: '',
-    telefono: '',
+    descripcion: '',
+    categoria: '',
+    precio: 0,
+    stock: 0,
   };
 
-  constructor(private fb: FormBuilder, private ventaService: VentaService, private productoService: ProductoService, private clienteService: ClienteService, private router: Router) {
+  constructor(
+    private fb: FormBuilder,
+    private ventaService: VentaService,
+    private productoService: ProductoService,
+    private clienteService: ClienteService,
+    private router: Router
+  ) {
     this.ventaForm = this.fb.group({
-      fecha: [new Date().toISOString().substring(0, 10)],
+      fecha: [new Date().toISOString().substring(0, 10), Validators.required],
       cliente: ['', Validators.required],
       metodoPago: ['', Validators.required],
       total: [{ value: 0, disabled: true }],
-      detalles: this.fb.array([])
+      detalles: this.fb.array([]),
     });
   }
 
@@ -73,6 +59,7 @@ export class VentaComponent implements OnInit {
     this.obtenerClientes();
     this.obtenerProductos();
   }
+
 
   mostrarFormularioAgregarProducto() {
     console.log('Boton Pulsado')
@@ -96,94 +83,68 @@ export class VentaComponent implements OnInit {
   }
 
   limpiarFormulario(): void {
-    this.venta = {
-      cliente: '',
-      fecha: '',
-      metodoPago: '',
-      total: 0,
-      detalles: []
-    };
-    this.detalle = {
-      productoId: 0,
-      cantidad: 0
-    };
+
   }
+
+  calcularTotal(): void {
+    const total = this.detalles.controls.reduce((acc, detalle) => {
+      const cantidad = detalle.get('cantidad')?.value || 0;
+      const precioUnitario = detalle.get('precioUnitario')?.value || 0;
+      return acc + cantidad * precioUnitario;
+    }, 0);
+    this.ventaForm.patchValue({ total });
+  }
+
 
   get detalles() {
     return this.ventaForm.get('detalles') as FormArray;
   }
-  calcularTotal() {
-    let total = 0;
-    this.detalles.controls.forEach(control => {
-      const cantidad = control.get('cantidad')?.value || 0;
-      const precio = control.get('precioUnitario')?.value || 0;
-      total += cantidad * precio;
-    });
-    this.ventaForm.get('total')?.setValue(total);
-  }
 
   agregarDetalle() {
-    const detalle = this.fb.group({
-      productoId: ['', Validators.required],
-      productoNombre: ['', Validators.required], // Añadir este campo
-      cantidad: ['', [Validators.required, Validators.min(1)]],
-      precioUnitario: ['', Validators.required]
+    const detalleForm = this.fb.group({
+      producto: ['', Validators.required],
+      cantidad: [1, [Validators.required, Validators.min(1)]],
+      precioUnitario: [0, [Validators.required, Validators.min(0)]],
     });
-    detalle.get('cantidad')?.valueChanges.subscribe(() => {
-      this.calcularTotal();
-    });
-    detalle.get('precioUnitario')?.valueChanges.subscribe(() => {
-      this.calcularTotal();
-    });
-    this.detalles.push(detalle);
+    this.detalles.push(detalleForm);
   }
 
 
   eliminarDetalle(index: number) {
     this.detalles.removeAt(index);
-    this.calcularTotal();
   }
 
   agregarVenta() {
-    console.log("Empezando venta");
-    console.log("Datos enviados al backend:", this.ventaForm.getRawValue());
+    if (this.ventaForm.invalid) {
+      alert('Por favor completa todos los campos.');
+      return;
+    }
 
-    const clienteNombre = this.ventaForm.value.cliente;
-    console.log(clienteNombre);
-    this.ventaService.buscarClientesPorNombre(clienteNombre).subscribe(cliente => {
-      const clienteId = cliente.id;
-      console.log(Object.keys(cliente));
-      console.log("Nombre del objeto " + cliente.nombre);
-      console.log(clienteId);
-      console.log("Mis pruebas" + cliente.nombre);
-      if (this.ventaForm.valid) {
-        const venta = {
-          fecha: this.ventaForm.value.fecha,
-          clienteId: clienteId,  // Aquí usamos el ID del cliente obtenido
-          metodoPago: this.ventaForm.value.metodoPago,
-          total: this.ventaForm.value.total,
-          detalles: this.ventaForm.value.detalles
-        };
+    const nuevaVenta: Venta = {
+      cliente: this.ventaForm.value.cliente,
+      metodoPago: this.ventaForm.value.metodoPago,
+      fecha: this.ventaForm.value.fecha,
+      total: this.ventaForm.value.total,
+      detalles: this.detalles.value.map((detalle: any) => ({
+        productoId: detalle.producto.id,
+        cantidad: detalle.cantidad,
+        precioUnitario: detalle.precioUnitario,
+      })),
+    };
 
-        console.log('Cliente:', this.ventaForm.value.cliente);
-
-        this.ventaService.saveVenta(venta).subscribe(response => {
-          console.log('Venta creada con éxito', response);
-          this.mensajeExito = '¡Venta añadida con éxito!';
-          setTimeout(() => {
-            this.mensajeExito = null;
-            this.router.navigate(['/venta']);
-          }, 4000);
-        }, error => {
-          console.error('Error al crear la venta:', error);
-        });
-      } else {
-        console.log("Formulario no válido");
+    this.ventaService.crearVenta(nuevaVenta).subscribe(
+      (ventaCreada) => {
+        this.ventas.push(ventaCreada);
+        this.cerrarModal();
+        this.cargarVentas();
+        this.ventaForm.reset();
+      },
+      (error) => {
+        console.error('Error al crear la venta:', error);
       }
-    }, error => {
-      console.error('Error al buscar el cliente:', error);
-    });
+    );
   }
+
 
   /* De los clientes */
   mostrarFormCliente(): void {
@@ -197,13 +158,13 @@ export class VentaComponent implements OnInit {
       this.clientes = data;
     });
   }
-  buscarClientes(event: any) {
-    const query = event.target.value.toLowerCase();
+  buscarClientes(event: Event): void {
+    const query = (event.target as HTMLInputElement).value.toLowerCase();
     this.clientesFiltrados = this.clientes.filter((cliente) =>
       cliente.nombre.toLowerCase().includes(query)
     );
     if (!this.clientesFiltrados.length && query) {
-      this.clientesFiltrados = [{ id: null, nombre: 'Agregar nuevo cliente' }];
+      this.clientesFiltrados = [{ id: 0, nombre: 'Agregar nuevo cliente', direccion: '', email: '', telefono: '' }];
     }
   }
   seleccionarCliente(cliente: any) {
@@ -235,21 +196,21 @@ export class VentaComponent implements OnInit {
       this.productos = data;
     });
   }
-  buscarProductos(event: any) {
-    const query = event.target.value.toLowerCase();
+  buscarProductos(event: Event): void {
+    const query = (event.target as HTMLInputElement).value.toLowerCase();
     this.productosFiltrados = this.productos.filter((producto) =>
       producto.nombre.toLowerCase().includes(query)
     );
-    if (!this.productosFiltrados.length && query) {
-      this.productosFiltrados = [{ id: null, nombre: 'Agregar nuevo Producto' }];
-    }
   }
-  seleccionarProducto(producto: any) {
+  seleccionarProducto(producto: any, index: number) {
     if (producto.id === null) {
-      // Mostrar formulario para agregar una nueva categoría
-      this.mostrarFormCliente();
+      this.mostrarFormProducto(); // Agregar nuevo producto
     } else {
-      this.nuevoProducto.producto = producto.nombre;
+      const detalle = this.detalles.at(index) as FormGroup;
+      detalle.patchValue({
+        producto: producto.nombre,
+        precioUnitario: producto.precio,
+      });
       this.productosFiltrados = [];
     }
   }

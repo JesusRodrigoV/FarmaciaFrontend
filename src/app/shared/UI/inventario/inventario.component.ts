@@ -15,7 +15,7 @@ import { Router } from '@angular/router';
   templateUrl: './inventario.component.html',
   styleUrl: './inventario.component.css'
 })
-export default class InventarioComponent implements OnInit{
+export default class InventarioComponent implements OnInit {
   productos: any[] = [];
   categorias: any[] = [];
   nuevaCategoria: string = '';
@@ -162,6 +162,16 @@ export default class InventarioComponent implements OnInit{
       console.log('Categoria agregada exitosamente')
       this.obtenerLaboratorios();
       this.cerrarFormLaboratorio()
+    });
+  }
+
+  downloadReport() {
+    this.productoService.downloadInventoryReport().subscribe(blob => {
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'Reporte_Inventario.pdf';
+      a.click(); window.URL.revokeObjectURL(url);
     });
   }
 }

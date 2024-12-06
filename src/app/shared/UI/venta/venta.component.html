@@ -82,7 +82,7 @@
               />
               <label for="producto" class="label">Producto</label>
               <div class="autocomplete-list" *ngIf="productosFiltrados.length">
-                <div *ngFor="let producto of productosFiltrados" (click)="seleccionarProducto(producto)" class="autocomplete-item">
+                <div *ngFor="let producto of productosFiltrados" (click)="seleccionarProducto(producto, producto.id)" class="autocomplete-item">
                   {{ producto.nombre }}
                 </div>
               </div>

@@ -33,4 +33,7 @@ export class ProductoService {
     return this.httpClient.get(`${this.API_SERVER}/buscar?nombre=${nombre}`);
   }
 
+  public downloadInventoryReport(): Observable<Blob> {
+    return this.httpClient.get(`${this.API_SERVER}/inventory`, { responseType: 'blob' });
+  }
 }

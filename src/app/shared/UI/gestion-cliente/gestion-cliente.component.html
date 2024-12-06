@@ -49,7 +49,6 @@
     <h1>{{ tituloFormulario }}</h1>
     <form (ngSubmit)="actualizarCliente()">
       <div class="input-container">
-        <label for="nombre">Nombre:</label>
         <input
           type="text"
           id="nombre"
@@ -57,10 +56,11 @@
           name="nombre"
           required
         />
+        <label for="nombre" class="label">Nombre:</label>
+        <div class="underline"></div>
       </div>
 
       <div class="input-container">
-        <label for="direccion">Email:</label>
         <input
           type="direccion"
           id="direccion"
@@ -68,9 +68,10 @@
           name="direccion"
           required
         />
+        <label for="direccion" class="label">Direccion</label>
+        <div class="underline"></div>
       </div >
       <div class="input-container">
-        <label for="email">Email:</label>
         <input
           type="email"
           id="email"
@@ -78,9 +79,10 @@
           name="email"
           required
         />
+        <label for="email" class="label">Email</label>
+        <div class="underline"></div>
       </div>
       <div class="input-container">
-        <label for="telefono">Teléfono:</label>
         <input
           type="text"
           id="telefono"
@@ -88,6 +90,8 @@
           name="telefono"
           required
         />
+        <label for="telefono" class="label">Teléfono</label>
+        <div class="underline"></div>
       </div>
       <button type="submit" class="modal-btn" (click)="guardarCliente()">Aceptar</button>
       <button type="button" class="modal-btn cancel-btn" (click)="cerrarFormCliente()">Cancelar</button>

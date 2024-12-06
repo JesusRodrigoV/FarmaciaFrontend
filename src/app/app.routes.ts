@@ -4,7 +4,6 @@ import { ReporteComponent } from './shared/UI/reporte/reporte.component';
 import { VentaComponent } from './shared/UI/venta/venta.component';
 import LayoutComponent from './shared/UI/layout/layout.component';
 import { InexistenteComponent } from './shared/UI/inexistente/inexistente.component';
-import { VentaFormComponent } from './shared/UI/venta-form/venta-form.component';
 import { GestionClienteComponent } from './shared/UI/gestion-cliente/gestion-cliente.component';
 import { GestionCategoriaComponent } from './shared/UI/gestion-categoria/gestion-categoria.component';
 import { GestionLaboratorioComponent } from './shared/UI/gestion-laboratorio/gestion-laboratorio.component';
@@ -38,7 +37,6 @@ export const routes: Routes = [
         path: '',
         loadComponent: () => import('./shared/UI/inventario/inventario.component'),
       },
-      { path: 'ventaform', component: VentaFormComponent},
       { path: 'cliente', component: GestionClienteComponent},
       { path: 'categoria', component: GestionCategoriaComponent},
       { path: 'laboratorio', component: GestionLaboratorioComponent},
