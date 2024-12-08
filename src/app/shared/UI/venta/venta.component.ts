@@ -13,14 +13,21 @@ import { ClienteService } from '../../../services/cliente/cliente.service';
   styleUrl: './venta.component.css'
 })
 export class VentaComponent implements OnInit {
+  filtroSeleccionado: string = 'dia';
+  fecha: string = '';
+  mes: number = new Date().getMonth() + 1;
+  anio: number = new Date().getFullYear();
   ventas: Venta[] = [];
   clientes: Cliente[] = [];
   clientesFiltrados: Cliente[] = [];
   productos: Producto[] = [];
-  productosFiltrados: Producto[] = [];
+  productosFiltrados: Producto[][] = [];
   mostrarModal = false;
   mostrarModalCliente = false;
   mostrarModalProducto = false;
+  verModalDetalles = false;
+  ventaSeleccionada: Venta | null = null;
+
 
   ventaForm: FormGroup;
   clienteNuevo: Partial<Cliente> = {
@@ -55,6 +62,10 @@ export class VentaComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    const today = new Date();
+    this.fecha = today.toISOString().split('T')[0];
+    this.filtroSeleccionado = 'dia';
+    this.filtrarVentas();
     this.cargarVentas();
     this.obtenerClientes();
     this.obtenerProductos();
@@ -102,7 +113,8 @@ export class VentaComponent implements OnInit {
 
   agregarDetalle() {
     const detalleForm = this.fb.group({
-      producto: ['', Validators.required],
+      producto: [null, Validators.required], // Objeto completo del producto
+      productoNombre: ['', Validators.required],
       cantidad: [1, [Validators.required, Validators.min(1)]],
       precioUnitario: [0, [Validators.required, Validators.min(0)]],
     });
@@ -114,7 +126,7 @@ export class VentaComponent implements OnInit {
     this.detalles.removeAt(index);
   }
 
-  agregarVenta() {
+  agregarVenta(): void {
     if (this.ventaForm.invalid) {
       alert('Por favor completa todos los campos.');
       return;
@@ -126,24 +138,19 @@ export class VentaComponent implements OnInit {
       fecha: this.ventaForm.value.fecha,
       total: this.ventaForm.value.total,
       detalles: this.detalles.value.map((detalle: any) => ({
-        productoId: detalle.producto.id,
+        producto: detalle.producto, // Objeto completo
         cantidad: detalle.cantidad,
         precioUnitario: detalle.precioUnitario,
       })),
     };
 
-    this.ventaService.crearVenta(nuevaVenta).subscribe(
-      (ventaCreada) => {
-        this.ventas.push(ventaCreada);
-        this.cerrarModal();
-        this.cargarVentas();
-        this.ventaForm.reset();
-      },
-      (error) => {
-        console.error('Error al crear la venta:', error);
-      }
-    );
+    this.ventaService.crearVenta(nuevaVenta).subscribe(() => {
+      this.cargarVentas();
+      this.ventaForm.reset();
+      this.mostrarModal = false;
+    });
   }
+
 
 
   /* De los clientes */
@@ -172,7 +179,7 @@ export class VentaComponent implements OnInit {
       // Mostrar formulario para agregar una nueva categoría
       this.mostrarFormCliente();
     } else {
-      this.ventaForm.patchValue({ cliente: cliente.nombre });
+      this.ventaForm.patchValue({ cliente });
       this.clientesFiltrados = [];
     }
   }
@@ -196,9 +203,9 @@ export class VentaComponent implements OnInit {
       this.productos = data;
     });
   }
-  buscarProductos(event: Event): void {
+  buscarProductos(event: Event, index: number): void {
     const query = (event.target as HTMLInputElement).value.toLowerCase();
-    this.productosFiltrados = this.productos.filter((producto) =>
+    this.productosFiltrados[index] = this.productos.filter((producto) =>
       producto.nombre.toLowerCase().includes(query)
     );
   }
@@ -208,10 +215,11 @@ export class VentaComponent implements OnInit {
     } else {
       const detalle = this.detalles.at(index) as FormGroup;
       detalle.patchValue({
-        producto: producto.nombre,
+        producto: producto, // Objeto completo
+        productoNombre: producto.nombre, // Solo el nombre para mostrar
         precioUnitario: producto.precio,
       });
-      this.productosFiltrados = [];
+      this.productosFiltrados[index] = [];
     }
   }
   guardarProducto(): void {
@@ -222,4 +230,45 @@ export class VentaComponent implements OnInit {
     });
   }
 
+  /* Mostrar Detalles de la venta */
+
+  mostrarModalDetalles(venta: Venta): void {
+    this.verModalDetalles = true;
+    this.ventaSeleccionada = venta;
+  }
+  cerrarModalDetalles() {
+    this.verModalDetalles = false;
+  }
+  /*Utiles */
+  isToday(date: string): boolean {
+    const today = new Date();
+    const ventaDate = new Date(date);
+    console.log("Hoy: " + today);
+    console.log(ventaDate);
+    return today.toDateString() === ventaDate.toDateString();
+  }
+
+  filtrarVentas() {
+    if (this.filtroSeleccionado === 'dia') {
+      this.ventaService.obtenerPorDia(this.fecha).subscribe((data) => (this.ventas = data));
+    } else if (this.filtroSeleccionado === 'mes') {
+      if (this.mes && (this.mes >= 1 && this.mes <= 12)) {
+        this.ventaService.obtenerPorMes(this.anio, this.mes).subscribe((data) => (this.ventas = data));
+      } else {
+        alert('Por favor ingrese un mes válido (1-12).');
+        return;
+      }
+
+    } else if (this.filtroSeleccionado === 'anio') {
+      if (this.anio && this.anio > 1900) {
+        this.ventaService.obtenerPorAño(this.anio).subscribe((data) => (this.ventas = data));
+      } else {
+        alert('Por favor ingrese un año válido.');
+        return;
+      }
+
+    } else {
+      this.ventaService.getAllVentas().subscribe((data) => (this.ventas = data));
+    }
+  }
 }

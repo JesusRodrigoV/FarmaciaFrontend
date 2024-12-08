@@ -119,7 +119,7 @@
       </div>
 
       <div class="input-container">
-        <label for="stock">Stock:</label>
+        <label for="stock">Stock</label>
         <input
           id="stock"
           type="number"
@@ -131,7 +131,7 @@
       </div>
 
       <div class="input-container">
-        <label for="precio">Precio:</label>
+        <label for="precio">Precio</label>
         <input
           id="precio"
           type="number"
@@ -143,7 +143,6 @@
       </div>
 
       <div class="input-container">
-        <label for="fechaVencimiento">Fecha de Vencimiento:</label>
         <input
           id="fechaVencimiento"
           type="date"
@@ -151,8 +150,57 @@
           name="fechaVencimiento"
           required
         />
+        <label for="fechaVencimiento">Fecha de Vencimiento</label>
         <div class="underline"></div>
       </div>
+      <div class="input-container">
+        <input
+          id="numeroLote"
+          type="text"
+          [(ngModel)]="nuevoProducto.numeroLote"
+          name="numeroLote"
+          required
+        />
+        <label for="numeroLote" class="label">Número de Lote:</label>
+        <div class="underline"></div>
+      </div>
+
+      <div class="input-container">
+        <label for="fechaFabricacion">Fecha de Fabricación</label>
+        <input
+          id="fechaFabricacion"
+          type="date"
+          [(ngModel)]="nuevoProducto.fechaFabricacion"
+          name="fechaFabricacion"
+          required
+        />
+        <div class="underline"></div>
+      </div>
+
+      <div class="input-container">
+        <input
+          id="formaFarmaceutica"
+          type="text"
+          [(ngModel)]="nuevoProducto.formaFarmaceutica"
+          name="formaFarmaceutica"
+          required
+        />
+        <label for="formaFarmaceutica" class="label">Forma Farmacéutica</label>
+        <div class="underline"></div>
+      </div>
+
+      <div class="input-container">
+        <input
+          id="cantidadPresentacion"
+          type="text"
+          [(ngModel)]="nuevoProducto.cantidadPresentacion"
+          name="cantidadPresentacion"
+          required
+        />
+        <label for="cantidadPresentacion" class="label">Cantidad y Presentación</label>
+        <div class="underline"></div>
+      </div>
+
 
       <button type="submit" class="modal-btn">Agregar</button>
       <button

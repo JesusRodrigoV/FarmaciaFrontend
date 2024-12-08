@@ -3,23 +3,88 @@
     <h2>Registro de Ventas</h2>
     <div class="actions">
       <input type="text" placeholder="Buscar Producto" class="search" />
-      <button class="btn red" (click)="mostrarModalVenta()">Agregar venta</button>
+      <select [(ngModel)]="filtroSeleccionado" (change)="filtrarVentas()">
+        <option value="dia">Por Día</option>
+        <option value="mes">Por Mes</option>
+        <option value="anio">Por Año</option>
+        <option value="todas">Todas</option>
+      </select>
+      <button class="btn red" (click)="mostrarModalVenta()">
+        Agregar venta
+      </button>
     </div>
   </header>
 
   <section class="table-section">
-    <table>
+    <!-- <table>
       <thead>
         <tr>
           <th>Cod Venta</th>
+          <th>Cliente</th>
           <th>Fecha</th>
           <th>Precio Total</th>
+          <th>Detalles</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let venta of ventas">
+          <ng-container *ngIf="isToday(venta.fecha)">
+            <td>{{ venta.id }}</td>
+            <td>{{ venta.cliente.nombre }}</td>
+            <td>{{ venta.fecha | date : "dd/MM/yyyy" }}</td>
+            <td>{{ venta.total }}</td>
+            <td>
+              <button (click)="mostrarModalDetalles(venta)">
+                <i class="bx bx-detail"></i>
+              </button>
+            </td>
+          </ng-container>
+        </tr>
+      </tbody>
+    </table> -->
+
+    <div *ngIf="filtroSeleccionado === 'dia'">
+      <input type="date" [(ngModel)]="fecha" (change)="filtrarVentas()" />
+    </div>
+    <div *ngIf="filtroSeleccionado === 'mes'">
+      <select name="mes" id="mes" [(ngModel)]="mes">
+        <option value="1">Enero</option>
+        <option value="2">Febrero</option>
+        <option value="3">Marzo</option>
+        <option value="4">Abril</option>
+        <option value="5">Mayo</option>
+        <option value="6">Junio</option>
+        <option value="7">Julio</option>
+        <option value="8">Agosto</option>
+        <option value="9">Septiembre</option>
+        <option value="10">Octubre</option>
+        <option value="11">Noviembre</option>
+        <option value="12">Diciembre</option>
+      </select>
+      <input type="number" [(ngModel)]="anio" placeholder="Año" />
+      <button (click)="filtrarVentas()">Filtrar</button>
+    </div>
+    <div *ngIf="filtroSeleccionado === 'anio'">
+      <input type="number" [(ngModel)]="anio" placeholder="Año" />
+      <button (click)="filtrarVentas()">Filtrar</button>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Fecha</th>
+          <th>Cliente</th>
+          <th>Método de Pago</th>
+          <th>Total</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let venta of ventas">
           <td>{{ venta.id }}</td>
-          <td>{{ venta.fecha | date: 'dd/MM/yyyy' }}</td>
+          <td>{{ venta.fecha }}</td>
+          <td>{{ venta.cliente.nombre }}</td>
+          <td>{{ venta.metodoPago }}</td>
           <td>{{ venta.total }}</td>
         </tr>
       </tbody>
@@ -28,6 +93,7 @@
 </main>
 
 <!-- Modal -->
+
 <div *ngIf="mostrarModal" class="modal">
   <div class="modal-content">
     <form [formGroup]="ventaForm">
@@ -37,6 +103,7 @@
           id="cliente"
           type="text"
           autocomplete="off"
+          [value]="ventaForm.value.cliente?.nombre || ''"
           (input)="buscarClientes($event)"
           formControlName="cliente"
           name="cliente"
@@ -44,7 +111,11 @@
         />
         <label for="cliente" class="label">Cliente</label>
         <div class="autocomplete-list" *ngIf="clientesFiltrados.length">
-          <div *ngFor="let cliente of clientesFiltrados" (click)="seleccionarCliente(cliente)" class="autocomplete-item">
+          <div
+            *ngFor="let cliente of clientesFiltrados"
+            (click)="seleccionarCliente(cliente)"
+            class="autocomplete-item"
+          >
             {{ cliente.nombre }}
           </div>
         </div>
@@ -69,28 +140,51 @@
         </div>
 
         <div formArrayName="detalles">
-          <div *ngFor="let detalle of detalles.controls; let i = index" [formGroupName]="i" class="detalle-row">
+          <div
+            *ngFor="let detalle of detalles.controls; let i = index"
+            [formGroupName]="i"
+            class="detalle-row"
+          >
             <div class="input-container">
               <input
                 id="producto"
                 type="text"
                 autocomplete="off"
-                (input)="buscarProductos($event)"
-                formControlName="producto"
+                (input)="buscarProductos($event, i)"
+                formControlName="productoNombre"
                 name="producto"
                 required
               />
               <label for="producto" class="label">Producto</label>
-              <div class="autocomplete-list" *ngIf="productosFiltrados.length">
-                <div *ngFor="let producto of productosFiltrados" (click)="seleccionarProducto(producto, producto.id)" class="autocomplete-item">
+              <div
+                class="autocomplete-list"
+                *ngIf="productosFiltrados[i]?.length"
+              >
+                <div
+                  *ngFor="let producto of productosFiltrados[i]"
+                  (click)="seleccionarProducto(producto, i)"
+                  class="autocomplete-item"
+                >
                   {{ producto.nombre }}
                 </div>
               </div>
               <div class="underline"></div>
             </div>
-            <input type="number" formControlName="cantidad" class="form-control cantidad-input" />
-            <input type="number" formControlName="precioUnitario" class="form-control precio-input" />
-            <button type="button" (click)="eliminarDetalle(i)" class="btn-icon eliminar-detalle">
+            <input
+              type="number"
+              formControlName="cantidad"
+              class="form-control cantidad-input"
+            />
+            <input
+              type="number"
+              formControlName="precioUnitario"
+              class="form-control precio-input"
+            />
+            <button
+              type="button"
+              (click)="eliminarDetalle(i)"
+              class="btn-icon eliminar-detalle"
+            >
               <i class="bx bxs-trash"></i>
             </button>
           </div>
@@ -98,10 +192,48 @@
       </section>
 
       <div class="form-actions">
-        <button type="button" (click)="agregarDetalle()" class="btn modal-btn">Agregar Detalle</button>
-        <button type="submit" (click)="agregarVenta()" class="btn cancel-btn">Guardar Venta</button>
-        <button type="submit" (click)="cerrarModal()" class="btn cancel-btn">Cancelar</button>
+        <button type="button" (click)="agregarDetalle()" class="btn modal-btn">
+          Agregar Detalle
+        </button>
+        <button type="submit" (click)="agregarVenta()" class="btn cancel-btn">
+          Guardar Venta
+        </button>
+        <button type="submit" (click)="cerrarModal()" class="btn cancel-btn">
+          Cancelar
+        </button>
       </div>
     </form>
+  </div>
+</div>
+
+<!-- Modal Detalles -->
+<div *ngIf="verModalDetalles" class="modal">
+  <div class="modal-content">
+    <h2>Detalles Venta</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Producto</th>
+          <th>Cantidad</th>
+          <th>Precio Unitario</th>
+          <th>Subtotal</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let detalle of ventaSeleccionada?.detalles">
+          <td>{{ detalle.producto.nombre }}</td>
+          <td>{{ detalle.cantidad }}</td>
+          <td>{{ detalle.precioUnitario | currency }}</td>
+          <td>{{ detalle.cantidad * detalle.precioUnitario | currency }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <button
+      type="submit"
+      (click)="cerrarModalDetalles()"
+      class="btn cancel-btn"
+    >
+      Cancelar
+    </button>
   </div>
 </div>

@@ -20,7 +20,19 @@ export default class InventarioComponent implements OnInit {
   categorias: any[] = [];
   nuevaCategoria: string = '';
   categoriaFiltrada: any[] = [];
-  nuevoProducto = { nombre: '', descripcion: '', categoria: '', laboratorio: '', stock: 0, precio: 0.0, fechaVencimiento: '' };
+  nuevoProducto = {
+    nombre: '',
+    descripcion: '',
+    categoria: '',
+    laboratorio: '',
+    stock: 0,
+    precio: 0.0,
+    fechaVencimiento: '',
+    numeroLote: '',
+    fechaFabricacion: '',
+    formaFarmaceutica: '',
+    cantidadPresentacion: '',
+  };
   mostrarModal: boolean = false;
   mostrarModalCategoria: boolean = false;
   categoriaNueva: any = {
@@ -71,7 +83,19 @@ export default class InventarioComponent implements OnInit {
         console.log('Producto agregado', response);
         this.obtenerProductos();
         this.cerrarModal();
-        this.nuevoProducto = { nombre: '', descripcion: '', categoria: '', laboratorio: '', stock: 0, precio: 0.0, fechaVencimiento: '' };
+        this.nuevoProducto = {
+          nombre: '',
+          descripcion: '',
+          categoria: '',
+          laboratorio: '',
+          stock: 0,
+          precio: 0.0,
+          fechaVencimiento: '',
+          numeroLote: '',
+          fechaFabricacion: '',
+          formaFarmaceutica: '',
+          cantidadPresentacion: '',
+        };
         this.mostrarModal = false;
       },
       error: (error) => {

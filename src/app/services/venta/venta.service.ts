@@ -19,6 +19,18 @@ export class VentaService {
     return this.httpClient.get(`${this.API_SERVER}/all`);
   }
 
+  obtenerPorDia(fecha: string): Observable<any> {
+    return this.httpClient.get(`${this.API_SERVER}/dia?fecha=${fecha}`);
+  }
+
+  obtenerPorMes(year: number, month: number): Observable<any> {
+    return this.httpClient.get(`${this.API_SERVER}/mes?year=${year}&month=${month}`);
+  }
+
+  obtenerPorAño(year: number): Observable<any> {
+    return this.httpClient.get(`${this.API_SERVER}/año?year=${year}`);
+  }
+
   crearVenta(venta: Venta): Observable<Venta> {
     return this.httpClient.post<Venta>(this.API_SERVER, venta);
   }
