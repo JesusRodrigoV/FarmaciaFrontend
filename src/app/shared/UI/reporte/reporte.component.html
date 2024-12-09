@@ -36,7 +36,7 @@
 
     <div *ngIf="productoSeleccionado.stock < productoSeleccionado.puntoReorden">
       <p class="alerta">
-        Este producto está cerca de agotarse. ¿Deseas calcular el EOQ?
+        Este producto está cerca de agotarse. ¿Deseas calcular la cantidad optima de pedido?
       </p>
       <label for="costoPedido">Costo de Pedido:</label>
       <input type="number" id="costoPedido" [(ngModel)]="costoPedido" />

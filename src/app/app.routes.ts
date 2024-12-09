@@ -9,10 +9,15 @@ import { GestionCategoriaComponent } from './shared/UI/gestion-categoria/gestion
 import { GestionLaboratorioComponent } from './shared/UI/gestion-laboratorio/gestion-laboratorio.component';
 import { GestionUsuariosComponent } from './shared/UI/gestionUsuarios/gestion-usuarios/gestion-usuarios.component';
 import { CategoriaFormComponent } from './shared/UI/categoriaForm/categoria-form/categoria-form.component';
+import { BienvenidaComponent } from './shared/UI/bienvenida/bienvenida.component';
 
 export const routes: Routes = [
   //{ path: '', component: LoginComponent },
-  { path: '', component: LayoutComponent },
+  { path: '', component: LayoutComponent ,
+    children:[
+      {path: '', component:BienvenidaComponent}
+    ]
+  },
   {
     path: 'gestion',
     loadComponent: () => import('./shared/UI/layout/layout.component'),

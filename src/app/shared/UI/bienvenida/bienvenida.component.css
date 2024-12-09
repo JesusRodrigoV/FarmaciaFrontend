@@ -1,0 +1,39 @@
+
+
+/* Centrado y diseño de fondo */
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+/* Estilos del texto */
+.welcome-title {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.welcome-subtitle {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+/* Botón personalizado */
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.btn.red {
+  background-color: #d32f2f;
+}
+
+.btn.red:hover {
+  background-color: #b
