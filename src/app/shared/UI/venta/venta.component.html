@@ -2,18 +2,67 @@
   <header class="header">
     <h2>Registro de Ventas</h2>
     <div class="actions">
-      <input type="text" placeholder="Buscar Producto" class="search" />
-      <select [(ngModel)]="filtroSeleccionado" (change)="filtrarVentas()">
+      <input type="text" placeholder="Buscar Producto" class="search-input" />
+
+      <button class="btn red add-sale-button" (click)="mostrarModalVenta()">
+        Agregar venta
+      </button>
+    </div>
+  </header>
+  <div class="filter-container">
+    <div class="filter-column">
+      <select
+        class="filter-select"
+        [(ngModel)]="filtroSeleccionado"
+        (change)="filtrarVentas()"
+      >
         <option value="dia">Por Día</option>
         <option value="mes">Por Mes</option>
         <option value="anio">Por Año</option>
         <option value="todas">Todas</option>
       </select>
-      <button class="btn red" (click)="mostrarModalVenta()">
-        Agregar venta
-      </button>
+      <div class="filter-options" *ngIf="filtroSeleccionado === 'dia'">
+        <input
+          type="date"
+          [(ngModel)]="fecha"
+          (change)="filtrarVentas()"
+          class="filter-input"
+        />
+      </div>
+      <div class="filter-options" *ngIf="filtroSeleccionado === 'mes'">
+        <select name="mes" id="mes" [(ngModel)]="mes" class="filter-input">
+          <option value="1">Enero</option>
+          <option value="2">Febrero</option>
+          <option value="3">Marzo</option>
+          <option value="4">Abril</option>
+          <option value="5">Mayo</option>
+          <option value="6">Junio</option>
+          <option value="7">Julio</option>
+          <option value="8">Agosto</option>
+          <option value="9">Septiembre</option>
+          <option value="10">Octubre</option>
+          <option value="11">Noviembre</option>
+          <option value="12">Diciembre</option>
+        </select>
+        <input
+          type="number"
+          [(ngModel)]="anio"
+          placeholder="Año"
+          class="filter-input"
+        />
+        <button (click)="filtrarVentas()" class="btn red">Filtrar</button>
+      </div>
+      <div class="filter-options" *ngIf="filtroSeleccionado === 'anio'">
+        <input
+          type="number"
+          [(ngModel)]="anio"
+          placeholder="Año"
+          class="filter-input"
+        />
+        <button (click)="filtrarVentas()" class="btn red">Filtrar</button>
+      </div>
     </div>
-  </header>
+  </div>
 
   <section class="table-section">
     <!-- <table>
@@ -43,58 +92,34 @@
       </tbody>
     </table> -->
 
-    <div *ngIf="filtroSeleccionado === 'dia'">
-      <input type="date" [(ngModel)]="fecha" (change)="filtrarVentas()" />
-    </div>
-    <div *ngIf="filtroSeleccionado === 'mes'">
-      <select name="mes" id="mes" [(ngModel)]="mes">
-        <option value="1">Enero</option>
-        <option value="2">Febrero</option>
-        <option value="3">Marzo</option>
-        <option value="4">Abril</option>
-        <option value="5">Mayo</option>
-        <option value="6">Junio</option>
-        <option value="7">Julio</option>
-        <option value="8">Agosto</option>
-        <option value="9">Septiembre</option>
-        <option value="10">Octubre</option>
-        <option value="11">Noviembre</option>
-        <option value="12">Diciembre</option>
-      </select>
-      <input type="number" [(ngModel)]="anio" placeholder="Año" />
-      <button (click)="filtrarVentas()">Filtrar</button>
-    </div>
-    <div *ngIf="filtroSeleccionado === 'anio'">
-      <input type="number" [(ngModel)]="anio" placeholder="Año" />
-      <button (click)="filtrarVentas()">Filtrar</button>
-    </div>
-
-    <table>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Fecha</th>
-          <th>Cliente</th>
-          <th>Método de Pago</th>
-          <th>Total</th>
-          <th>Detalle</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let venta of ventas">
-          <td>{{ venta.id }}</td>
-          <td>{{ venta.fecha }}</td>
-          <td>{{ venta.cliente.nombre }}</td>
-          <td>{{ venta.metodoPago }}</td>
-          <td>{{ venta.total }}</td>
-          <td>
-            <button (click)="mostrarModalDetalles(venta)">
-              <i class="bx bx-detail"></i>
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <section class="table-section">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Fecha</th>
+            <th>Cliente</th>
+            <th>Método de Pago</th>
+            <th>Total</th>
+            <th>Detalle</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let venta of ventas">
+            <td>{{ venta.id }}</td>
+            <td>{{ venta.fecha }}</td>
+            <td>{{ venta.cliente.nombre }}</td>
+            <td>{{ venta.metodoPago }}</td>
+            <td>{{ venta.total }}</td>
+            <td>
+              <button (click)="mostrarModalDetalles(venta)" class="btn-editar">
+                <i class="bx bx-detail"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
   </section>
 </main>
 

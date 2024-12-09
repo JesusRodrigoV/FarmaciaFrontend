@@ -137,7 +137,7 @@ export class VentaComponent implements OnInit {
       alert('Por favor completa todos los campos.');
       return;
     }
-
+    console.log(this.ventaForm);
     const nuevaVenta: Venta = {
       cliente: this.ventaForm.value.cliente,
       metodoPago: this.ventaForm.value.metodoPago,

@@ -15,6 +15,62 @@
 }
 /*
 ********************************
+====== Secciones del sistema =====
+********************************
+*/
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+.search-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+.filter-container {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end; /* Alinear al final */
+  padding: 10px 0;
+}
+.filter-column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 20%;
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.filter-select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.filter-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.filter-input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+
+/*
+********************************
 ====== Seccion de Modales =====
 ********************************
 */
@@ -218,6 +274,7 @@ input[type="email"] {
 .btn-eliminar:hover {
   color: var(--rojo-hover);
 }
+
 .centrar {
   display: flex;
   justify-content: center;
@@ -237,6 +294,7 @@ table {
 
 table th,
 table td {
+  margin-left: 5px;
   text-align: left;
   padding: 10px;
 }
@@ -245,6 +303,9 @@ table thead {
   background-color: #e0e0e0;
 }
 
+table tbody tr:nth-child(even) {
+  background-color: #f0f0f0;
+}
 /*
 ********************************
 ====== Seccion de alertas =====

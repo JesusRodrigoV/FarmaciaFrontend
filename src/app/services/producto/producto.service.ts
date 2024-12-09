@@ -49,4 +49,27 @@ export class ProductoService {
   public obtenerPredicciones(idProducto: number): Observable<number[][]> {
     return this.httpClient.get<number[][]>(`${this.API_SERVER}/predicciones/${idProducto}`);
   }
+  public procesarMatriz(matriz: number[][]): PrediccionResumen[] {
+    const estados = ['Bajo', 'Medio', 'Alto'];
+    const resumen: PrediccionResumen[] = [];
+
+    for (let i = 0; i < matriz.length; i++) {
+      for (let j = 0; j < matriz[i].length; j++) {
+        resumen.push({
+          estadoOrigen: estados[i],
+          estadoDestino: estados[j],
+          proba: matriz[i][j] * 100,
+          probabilidad: `${(matriz[i][j] * 100).toFixed(2)}%`,
+        });
+      }
+    }
+
+    return resumen;
+  }
+}
+export interface PrediccionResumen {
+  estadoOrigen: string;
+  estadoDestino: string;
+  proba:number;
+  probabilidad: string;
 }

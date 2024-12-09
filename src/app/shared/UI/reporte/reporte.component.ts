@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ProductoService } from '../../../services/producto/producto.service';
+import { PrediccionResumen, ProductoService } from '../../../services/producto/producto.service';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { CommonModule } from '@angular/common';
 import Chart from 'chart.js/auto';
@@ -13,15 +13,20 @@ import { Producto } from '../../../services/venta/venta.service';
   styleUrl: './reporte.component.css'
 })
 export class ReporteComponent implements OnInit{
+  matrizTransicion: number[][] = [];
   productos: any[] = [];
   productosFiltrados: Producto[] = [];
   pieChart: any;
   totalProductos = 0;
   nombreProducto: string = ''; // Nombre del producto ingresado por el usuario
+  productoAct: any = {};
   productoSeleccionado: any = null; // Datos del producto seleccionado
   productoNoEncontrado: boolean = false; // Indicador de producto no encontrado
   costoPedido: number = 0; // Costo de pedido ingresado
   costoAlmacenamiento: number = 0; // Costo de almacenamiento ingresado
+  errorMessage: string | null = null;
+  resumenPredicciones: PrediccionResumen[] = [];
+  verModalAlerta: boolean = false;
 
   constructor(private productoService: ProductoService) {}
 
@@ -98,6 +103,8 @@ export class ReporteComponent implements OnInit{
       next: (productos) => {
         if (productos && productos.length > 0) {
           this.productoSeleccionado = productos[0]; // Selecciona el primer producto encontrado
+          this.obtenerPredicciones(this.productoSeleccionado.id);
+          console.log(this.productoSeleccionado.id);
           this.productoNoEncontrado = false;
         } else {
           this.productoNoEncontrado = true;
@@ -110,7 +117,12 @@ export class ReporteComponent implements OnInit{
       },
     });
   }
-
+abrirModalAlerta(){
+  this.verModalAlerta = true;
+}
+cerrarModalAlerta(){
+  this.verModalAlerta = false;
+}
   calcularEOQ(): void {
     if (this.costoPedido <= 0 || this.costoAlmacenamiento <= 0) {
       alert('Por favor ingresa valores válidos para los costos.');
@@ -122,6 +134,11 @@ export class ReporteComponent implements OnInit{
       .subscribe({
         next: (productoActualizado) => {
           this.productoSeleccionado = productoActualizado;
+          this.abrirModalAlerta();
+          this.productoAct = {
+            eoq: productoActualizado.eoq,
+            puntoReorden: productoActualizado.puntoReorden
+          };
           alert(`EOQ calculado: ${productoActualizado.eoq}\nPunto de Reorden: ${productoActualizado.puntoReorden}`);
         },
         error: (err) => {
@@ -139,5 +156,17 @@ export class ReporteComponent implements OnInit{
     this.productoSeleccionado = producto;
     this.nombreProducto = producto.nombre; // Autocompletar el input
     this.productosFiltrados = []; // Ocultar la lista de sugerencias
+  }
+  obtenerPredicciones(idProducto: number): void {
+    this.productoService.obtenerPredicciones(idProducto).subscribe(
+      (matriz) => {
+        this.resumenPredicciones = this.productoService.procesarMatriz(matriz);
+        console.log(matriz);
+      },
+      (error) => {
+        this.errorMessage = 'Error al obtener las predicciones. Inténtalo más tarde.';
+        console.error(error);
+      }
+    );
   }
 }

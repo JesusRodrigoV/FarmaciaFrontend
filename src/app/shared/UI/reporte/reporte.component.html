@@ -33,10 +33,36 @@
     <p>
       <strong>Punto de Reorden:</strong> {{ productoSeleccionado.puntoReorden }}
     </p>
+    <p>
+      <strong>Predicciones:</strong>
+    </p>
+
+    <div *ngIf="resumenPredicciones.length > 0; else noData">
+      <ul class="list-disc px-5">
+        <div *ngFor="let prediccion of resumenPredicciones">
+          <div *ngIf="prediccion.proba > 0">
+            <li>
+              Si el estado actual es
+              <strong>{{ prediccion.estadoOrigen }}</strong
+              >, hay un <strong>{{ prediccion.probabilidad }}</strong> de que
+              pase a <strong>{{ prediccion.estadoDestino }}</strong
+              >.
+            </li>
+          </div>
+        </div>
+      </ul>
+    </div>
+
+    <ng-template #noData>
+      <p class="text-center text-gray-600">
+        No hay datos disponibles para este producto.
+      </p>
+    </ng-template>
 
     <div *ngIf="productoSeleccionado.stock < productoSeleccionado.puntoReorden">
       <p class="alerta">
-        Este producto está cerca de agotarse. ¿Deseas calcular la cantidad optima de pedido?
+        Este producto está cerca de agotarse. ¿Deseas calcular la cantidad
+        optima de pedido?
       </p>
       <label for="costoPedido">Costo de Pedido:</label>
       <input type="number" id="costoPedido" [(ngModel)]="costoPedido" />
@@ -53,5 +79,13 @@
   <!-- Mostrar mensaje si no hay producto encontrado -->
   <div *ngIf="productoNoEncontrado">
     <p>No se encontró ningún producto con ese nombre.</p>
+  </div>
+</div>
+<div *ngIf="verModalAlerta" class="modal">
+  <div class="modal-content">
+    <h2>EOQ Calculado</h2>
+    <p><strong>EOQ:</strong> {{ productoAct.eoq }}</p>
+    <p><strong>Punto de Reorden:</strong> {{ productoAct.puntoReorden }}</p>
+    <button (click)="cerrarModalAlerta()">Cerrar</button>
   </div>
 </div>
