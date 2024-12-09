@@ -188,18 +188,29 @@
         <label for="formaFarmaceutica" class="label">Forma Farmacéutica</label>
         <div class="underline"></div>
       </div>
-
       <div class="input-container">
         <input
-          id="cantidadPresentacion"
-          type="text"
-          [(ngModel)]="nuevoProducto.cantidadPresentacion"
-          name="cantidadPresentacion"
+          id="tiempoEntrega"
+          type="number"
+          [(ngModel)]="nuevoProducto.tiempoEntrega"
+          name="tiempoEntrega"
           required
         />
-        <label for="cantidadPresentacion" class="label">Cantidad y Presentación</label>
+        <label for="tiempoEntrega" class="label">Tiempo de Entrega en dia </label>
         <div class="underline"></div>
       </div>
+      <div class="input-container">
+        <input
+          id="stockSeguridad"
+          type="number"
+          [(ngModel)]="nuevoProducto.stockSeguridad"
+          name="stockSeguridad"
+          required
+        />
+        <label for="stockSeguridad" class="label">Stock minimo </label>
+        <div class="underline"></div>
+      </div>
+
 
 
       <button type="submit" class="modal-btn">Agregar</button>

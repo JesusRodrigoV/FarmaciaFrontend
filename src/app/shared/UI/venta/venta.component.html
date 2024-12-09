@@ -77,6 +77,7 @@
           <th>Cliente</th>
           <th>Método de Pago</th>
           <th>Total</th>
+          <th>Detalle</th>
         </tr>
       </thead>
       <tbody>
@@ -86,6 +87,11 @@
           <td>{{ venta.cliente.nombre }}</td>
           <td>{{ venta.metodoPago }}</td>
           <td>{{ venta.total }}</td>
+          <td>
+            <button (click)="mostrarModalDetalles(venta)">
+              <i class="bx bx-detail"></i>
+            </button>
+          </td>
         </tr>
       </tbody>
     </table>

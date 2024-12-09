@@ -1,11 +1,41 @@
 .container {
-  display: flex;
-  height: 100vh;
+  padding: 20px;
 }
 
-.main-content {
-  width: 100%;
-  padding: 20px;
+.buscador {
+  margin-bottom: 20px;
+}
+
+label {
+  margin-right: 10px;
+}
+
+input {
+  margin-right: 10px;
+}
+
+button {
+  padding: 5px 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+.producto-detalle {
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.alerta {
+  color: #d32f2f;
+  font-weight: bold;
 }
 
 .graphs {

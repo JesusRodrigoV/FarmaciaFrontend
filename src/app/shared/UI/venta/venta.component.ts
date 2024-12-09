@@ -37,12 +37,18 @@ export class VentaComponent implements OnInit {
     telefono: '',
   };
 
-  nuevoProducto: Partial<Producto> = {
+  nuevoProducto = {
     nombre: '',
     descripcion: '',
     categoria: '',
-    precio: 0,
+    laboratorio: '',
     stock: 0,
+    precio: 0.0,
+    fechaVencimiento: '',
+    numeroLote: '',
+    fechaFabricacion: '',
+    formaFarmaceutica: '',
+    puntoReorden: 0,
   };
 
   constructor(

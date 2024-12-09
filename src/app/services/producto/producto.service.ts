@@ -36,4 +36,17 @@ export class ProductoService {
   public downloadInventoryReport(): Observable<Blob> {
     return this.httpClient.get(`${this.API_SERVER}/inventory`, { responseType: 'blob' });
   }
+  public calcularInventario(id: number, costoPedido: number, costoAlmacenamiento: number): Observable<any> {
+    return this.httpClient.post<any>(`${this.API_SERVER}/calcular-inventario`, null, {
+      params: {
+        id: id.toString(),
+        costoPedido: costoPedido.toString(),
+        costoAlmacenamiento: costoAlmacenamiento.toString(),
+      },
+    });
+  }
+
+  public obtenerPredicciones(idProducto: number): Observable<number[][]> {
+    return this.httpClient.get<number[][]>(`${this.API_SERVER}/predicciones/${idProducto}`);
+  }
 }

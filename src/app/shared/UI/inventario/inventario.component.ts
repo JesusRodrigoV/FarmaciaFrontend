@@ -2,11 +2,9 @@ import { provideCharts } from 'ng2-charts';
 
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NavbarComponent } from '../navbar/navbar.component';
 import { FormsModule } from '@angular/forms';
 import { ProductoService } from '../../../services/producto/producto.service';
 import { CategoriaLaboratorioServiceService } from '../../../services/categoriaLaboratorio/categoria-laboratorio-service.service';
-import { Router } from '@angular/router';
 
 
 @Component({
@@ -31,7 +29,10 @@ export default class InventarioComponent implements OnInit {
     numeroLote: '',
     fechaFabricacion: '',
     formaFarmaceutica: '',
-    cantidadPresentacion: '',
+    puntoReorden: 0,
+    eoq: 0,
+    tiempoEntrega: 3,
+    stockSeguridad: 10,
   };
   mostrarModal: boolean = false;
   mostrarModalCategoria: boolean = false;
@@ -84,6 +85,7 @@ export default class InventarioComponent implements OnInit {
         this.obtenerProductos();
         this.cerrarModal();
         this.nuevoProducto = {
+
           nombre: '',
           descripcion: '',
           categoria: '',
@@ -94,7 +96,10 @@ export default class InventarioComponent implements OnInit {
           numeroLote: '',
           fechaFabricacion: '',
           formaFarmaceutica: '',
-          cantidadPresentacion: '',
+          puntoReorden: 0,
+          eoq: 0,
+          tiempoEntrega: 3,
+          stockSeguridad: 10,
         };
         this.mostrarModal = false;
       },
